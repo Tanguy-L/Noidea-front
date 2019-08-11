@@ -1,0 +1,47 @@
+.red {
+  background-color: #c85656;
+}
+
+.yellow {
+  background-color: #f2d388;
+}
+
+.blue {
+  background-color: #568bc8;
+}
+
+.green {
+  background-color: #56c856;
+}
+
+.margin-height-16 {
+  margin: 16px 0;
+}
+
+.margin-height-24 {
+  margin: 24px 0;
+}
+
+.margin-top-16 {
+  margin-top: 16px;
+}
+
+.margin-top-8 {
+  margin-top: 8px;
+}
+
+.flex-center {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.center-block {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.text-big-button {
+  font-size: 18px;
+  line-height: 24px;
+}
