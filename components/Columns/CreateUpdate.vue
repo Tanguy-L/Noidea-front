@@ -1,14 +1,14 @@
 <template>
   <div>
     <button class="text-big-button" @click="showModal = !showModal">
-      Ajouter une colonne
+      Ajouter une mise à jour
     </button>
     <ModalUpdate v-if="showModal" @closeModal="showModal = false" />
   </div>
 </template>
 
 <script>
-import ModalUpdate from "@/components/ModalUpdate.vue";
+import ModalUpdate from "@/components/Modals/ModalUpdate.vue";
 
 export default {
   components: {

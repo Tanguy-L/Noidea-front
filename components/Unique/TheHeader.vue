@@ -1,6 +1,6 @@
 <template>
   <header class="flex-center">
-    <h1>No Idea</h1>
+    <img src="~/assets/images/logo-noidea.png" />
   </header>
 </template>
 

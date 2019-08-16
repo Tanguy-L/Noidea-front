@@ -1,15 +1,15 @@
 <template>
   <div id="main-layout">
-    <HeaderApp />
+    <TheHeader />
     <nuxt />
   </div>
 </template>
 
 <script>
-import HeaderApp from "@/components/HeaderApp.vue";
+import TheHeader from "@/components/Unique/TheHeader.vue";
 export default {
   components: {
-    HeaderApp
+    TheHeader
   }
 };
 </script>

@@ -1,17 +1,22 @@
 <template>
   <div class="column-update">
-    <h3>{{ update.name }}</h3>
-    <p class="text-full-width">{{ update.date | formatDate }}</p>
-    <p class="text-full-width">{{ update.versionProject }}</p>
-    <Category
-      v-for="(el, index) in tasksByCategories"
+    <h3>{{ currentUpdate.name }}</h3>
+    <i
+      class="material-icons delete-category red"
+      @click="removeProject(idUpdate)"
+      >delete_forever</i
+    >
+    <p class="text-full-width">{{ currentUpdate.date | formatDate }}</p>
+    <p class="text-full-width">{{ currentUpdate.versionProject }}</p>
+    <CategoryCard
+      v-for="(el, index) in categories"
+      :id="idUpdate"
       :key="index"
       :category="el"
-      :id-update="update._id"
     />
     <ModalCategory
       v-if="showModalCategory"
-      :id-update="update._id"
+      :id-update="idUpdate"
       @closeModal="showModalCategory = false"
     />
     <button
@@ -24,12 +29,13 @@
 </template>
 
 <script>
-import Category from "@/components/CategoryCard.vue";
-import ModalCategory from "@/components/ModalCategory.vue";
+import CategoryCard from "@/components/Cards/CategoryCard.vue";
+import ModalCategory from "@/components/Modals/ModalCategory.vue";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
-    Category,
+    CategoryCard,
     ModalCategory
   },
   filters: {
@@ -63,14 +69,8 @@ export default {
     }
   },
   props: {
-    categories: {
-      type: Array,
-      default: () => {
-        return [];
-      }
-    },
-    update: {
-      type: Object,
+    idUpdate: {
+      type: String,
       default: () => {
         return "";
       }
@@ -82,19 +82,13 @@ export default {
     };
   },
   computed: {
-    tasksByCategories() {
-      let array = [];
-      array = this.categories.map(el => {
-        let object = {};
-        object.tasks = this.update.tasks.filter(
-          task => task.category === el._id
-        );
-        object.name = el.name;
-        object._id = el._id;
-        return object;
-      });
-      return array;
+    ...mapGetters(["categories", "updateByIndex", "updates"]),
+    currentUpdate() {
+      return this.updateByIndex(this.idUpdate);
     }
+  },
+  methods: {
+    ...mapActions(["removeProject"])
   }
 };
 </script>
@@ -108,6 +102,7 @@ export default {
   display: inline-block;
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.308);
   overflow-y: auto;
+  position: relative;
 }
 
 .text-full-width {
@@ -133,5 +128,16 @@ export default {
 
 .add-category:focus {
   outline: 0;
+}
+
+.delete-category {
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: white;
+}
+
+.delete-category:hover {
+  cursor: pointer;
 }
 </style>

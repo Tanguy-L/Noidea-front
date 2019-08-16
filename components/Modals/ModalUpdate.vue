@@ -1,20 +1,30 @@
 <template>
-  <div class="modal">
-    <h4 class="margin-height-24">Ajouter une maj</h4>
+  <Modal title-modal="Ajouter une nouvelle mise à jour">
     <div class="modal-container">
       <div class="modal-input margin-top-16">
         <label for="category-name">Nom de la maj: </label>
-        <input v-model="update.name" type="text" name="category-name" />
+        <input
+          v-model="update.name"
+          placeholder="Ma super maj"
+          type="text"
+          name="category-name"
+        />
       </div>
       <div class="modal-input margin-top-16">
         <label for="category-name">version de la maj: </label>
-        <input v-model="update.version" type="text" name="category-name" />
+        <input
+          v-model="update.version"
+          placeholder="v1.0.0"
+          type="text"
+          name="category-name"
+        />
       </div>
       <div class="modal-input margin-top-16">
-        <label for="category-name">date de la maj: </label>
+        <label for="category-name">date de fin: </label>
         <vue-datepicker-local
           v-model="update.date"
           :local="local"
+          class="datepicker"
         ></vue-datepicker-local>
       </div>
       <div style="width:100%;display:flex;justify-content:center">
@@ -27,13 +37,17 @@
         <button class="red" @click="exitModal()">quitter</button>
       </div>
     </div>
-  </div>
+  </Modal>
 </template>
 
 <script>
-import axios from "~/plugins/axios";
+import { mapActions } from "vuex";
+import Modal from "@/components/Base/BaseModal.vue";
 
 export default {
+  components: {
+    Modal
+  },
   data() {
     return {
       update: {
@@ -58,28 +72,18 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["addUpdate"]),
     exitModal() {
       this.$emit("closeModal");
     },
     async SendUpdate() {
-      const update = this.update;
-      try {
-        await axios.post("/v1/projects", {
-          name: update.name,
-          version: update.version,
-          date: update.date
-        });
-      } catch (error) {
-        if (error.response) {
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          console.log("Error", error.message);
-        }
-        console.log(error);
+      const regexVersion = /\b[v][\d]\b\.\b[\d]\b\.\b[\d]\b/;
+      if (
+        this.update.name !== "" &&
+        this.update.version !== "" &&
+        regexVersion.test(this.update.version)
+      ) {
+        this.addUpdate(this.update);
       }
     }
   }
@@ -87,27 +91,6 @@ export default {
 </script>
 
 <style scoped>
-.modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 50%;
-  background-color: white;
-  box-shadow: 0 3px 12px black;
-  z-index: 20;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 12px;
-}
-
-input,
-p,
-label {
-  color: black;
-}
-
 .modal-container {
   width: 70%;
   display: flex;
@@ -132,5 +115,9 @@ label {
 h4 {
   width: 100%;
   text-align: center;
+}
+
+.datepicker {
+  border: 1px black solid;
 }
 </style>

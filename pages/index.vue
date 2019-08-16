@@ -1,34 +1,31 @@
 <template>
   <div class="main-page" style="flex-wrap:wrap;">
-    <Update
-      v-for="(el, index) in updates"
-      :key="index"
-      :categories="categories"
-      :update="el"
-    />
-    <createUpdate />
+    <Update v-for="(el, index) in updates" :key="index" :id-update="el._id" />
+    <CreateUpdate />
   </div>
 </template>
 
 <script>
-import Update from "@/components/Update.vue";
-import createUpdate from "@/components/CreateUpdate.vue";
+import Update from "@/components/Columns/Update.vue";
+import CreateUpdate from "@/components/Columns/CreateUpdate.vue";
 import { mapGetters } from "vuex";
 
 export default {
   components: {
     Update,
-    createUpdate
+    CreateUpdate
   },
   data() {
-    return {};
+    return {
+      test: ""
+    };
   },
   computed: {
     ...mapGetters(["categories", "updates"])
   },
   async fetch({ store }) {
     await store.dispatch("fetchData");
-    await store.dispatch("getCategories");
+    await store.dispatch("fetchCategories");
   }
 };
 </script>
