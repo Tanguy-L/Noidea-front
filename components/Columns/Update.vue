@@ -1,6 +1,7 @@
 <template>
   <div class="column-update">
-    <h3>{{ currentUpdate.name }}</h3>
+    <Bar v-if="allTasks > 0" :value="tasksDone" :total="allTasks" />
+    <h3 class="margin-height-24 ">{{ currentUpdate.name }}</h3>
     <i
       class="material-icons delete-category red"
       @click="removeProject(idUpdate)"
@@ -9,7 +10,7 @@
     <p class="text-full-width">{{ currentUpdate.date | formatDate }}</p>
     <p class="text-full-width">{{ currentUpdate.versionProject }}</p>
     <CategoryCard
-      v-for="(el, index) in categories"
+      v-for="(el, index) in currentUpdate.categories"
       :id="idUpdate"
       :key="index"
       :category="el"
@@ -31,12 +32,14 @@
 <script>
 import CategoryCard from "@/components/Cards/CategoryCard.vue";
 import ModalCategory from "@/components/Modals/ModalCategory.vue";
+import Bar from "@/components/Base/BaseProgressionBar.vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
     CategoryCard,
-    ModalCategory
+    ModalCategory,
+    Bar
   },
   filters: {
     formatDate: function(value) {
@@ -85,6 +88,13 @@ export default {
     ...mapGetters(["categories", "updateByIndex", "updates"]),
     currentUpdate() {
       return this.updateByIndex(this.idUpdate);
+    },
+    tasksDone() {
+      const result = this.currentUpdate.tasks.filter(e => e.done === true);
+      return result.length;
+    },
+    allTasks() {
+      return this.currentUpdate.tasks.length;
     }
   },
   methods: {
@@ -133,7 +143,7 @@ export default {
 .delete-category {
   position: absolute;
   right: 0;
-  top: 0;
+  top: 40px;
   color: white;
 }
 

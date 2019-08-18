@@ -39,7 +39,6 @@
       <button class="blue" @click="addRowTask()">Ajouter une tache</button>
       <button class="red" @click="exitModal()">quitter</button>
     </div>
-    {{ $data }}
   </Modal>
 </template>
 
@@ -71,7 +70,7 @@ export default {
     ...mapGetters(["categoriesByName"])
   },
   methods: {
-    ...mapActions(["addCategory", "addCategoryAndTasks"]),
+    ...mapActions(["addCategory", "addCategoryProject", "addTask"]),
     exitModal() {
       this.$emit("closeModal");
     },
@@ -88,11 +87,18 @@ export default {
       return this.payload.tasks.splice(index);
     },
     addCategoryRequest() {
-      if (this.payload.tasks.length > 0) {
-        this.addCategoryAndTasks(this.payload);
-      } else {
-        this.addCategory({ name: this.payload.categoryName });
-      }
+      const payload = {
+        id: {
+          update: this.idUpdate
+        },
+        body: {
+          name: this.payload.categoryName
+        }
+      };
+      this.addCategoryProject(payload);
+      /* this.tasks.forEach(task => {
+          this.addTask
+        }); */
     }
   }
 };

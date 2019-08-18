@@ -1,40 +1,144 @@
 <template>
-  <div class="main-page" style="flex-wrap:wrap;">
-    <Update v-for="(el, index) in updates" :key="index" :id-update="el._id" />
-    <CreateUpdate />
+  <div class="parent-container">
+    <div class="main-index">
+      <div class="container-content">
+        <h1 class="margin-height-16 title">
+          Bienvenue sur <span class="text-blue"> No-Idea 🙂</span>
+        </h1>
+        <p class="margin-height-16 text">
+          No-idea est un projet qui permet de manipuler des tickets. Il n'y a
+          pour l'instant pas d'authentification nécessaire, ce site est une
+          démo.
+        </p>
+        <p class="margin-height-16 text">
+          Le site se présente un peu comme trello, chaque colonne représente des
+          "mise à jours", pour chacune d'entre elle, il est possible d'ajouter
+          des catégories, et chaque catégorie à ses propres tâches.
+        </p>
+        <p class="margin-height-16 text">
+          Le projet est encore en pleine évolution et d'autres features vont
+          faire leur apparition au cours du temps, tout comme le design sera
+          susceptible de changer.
+        </p>
+      </div>
+      <div class="container-techno-card">
+        <h3>Ce que j'ai appris avec ce projet</h3>
+        <div>
+          <p class="black">
+            Backend :
+          </p>
+          <ul>
+            <li>API NodeJS et koaJS</li>
+            <li>BDD MongoDB et Mongoose</li>
+            <li>Dockerisation de l'application pour un déploiement rapide</li>
+            <li>Jest pour les tests</li>
+            <li>
+              Le projet est sur Git:
+              <a href="https://github.com/Tanguy-L/api-noidea">Cliquer ici !</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <p class="black">
+            Frontend :
+          </p>
+          <ul>
+            <li>
+              Nuxt-JS (VueJS coté serveur)
+            </li>
+            <li>VueX</li>
+            <li>Dockerisation de l'application pour un déploiement rapide</li>
+            <li>Requête Axios</li>
+            <li>Rythme verticale et Design</li>
+            <li>Pas encore responsive (mais c'est prévu)</li>
+            <li>
+              Le projet est sur Git:
+              <a href="https://github.com/Tanguy-L/noidea-front"
+                >Cliquer ici !</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div>
+          <p class="black">
+            Environnement de dévelopement :
+          </p>
+          <ul>
+            <li>Windows 10 avec sous-système Ubuntu pour l'API et Mongo</li>
+            <li>Visual Studio Code Community</li>
+            <li>Postman, Robo3T, Inkscape, AdobeXD, Gitkraken</li>
+            <li>Serveur VPS OVH</li>
+            <li>Versionning Git</li>
+            <li>ESlint</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import Update from "@/components/Columns/Update.vue";
-import CreateUpdate from "@/components/Columns/CreateUpdate.vue";
-import { mapGetters } from "vuex";
-
-export default {
-  components: {
-    Update,
-    CreateUpdate
-  },
-  data() {
-    return {
-      test: ""
-    };
-  },
-  computed: {
-    ...mapGetters(["categories", "updates"])
-  },
-  async fetch({ store }) {
-    await store.dispatch("fetchData");
-    await store.dispatch("fetchCategories");
-  }
-};
+export default {};
 </script>
 
 <style scoped>
-.main-page {
-  background-color: #d6d6d6;
-  padding-top: 24px;
-  height: calc(100% - 96px);
+.parent-container {
+  background-color: rgb(243, 243, 243);
+  height: calc(100% - 56px);
+}
+
+.container-techno-card {
+  width: 100%;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  min-height: 0;
+  margin-top: 48px;
+}
+
+h3 {
+  width: 100%;
+  color: #568bc8;
+}
+
+.main-index {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.container-content {
+  display: flex;
+  width: 65%;
+  flex-wrap: wrap;
+  align-items: center;
+  flex-direction: column;
+  min-height: 0;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  margin-top: 8px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  line-height: 24px;
+}
+
+.text-blue {
+  color: #568bc8;
+}
+
+.black {
+  color: rgb(22, 58, 87);
+  text-align: center;
+}
+
+.text {
+  color: black;
+  max-width: 65%;
+  text-align: center;
 }
 </style>

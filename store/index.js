@@ -14,14 +14,10 @@ export const mutations = {
     state.updates = payload;
   },
   PUSH_TASK(state, payload) {
-    const { update, ...task } = payload;
-    let updateCurrent = state.updates.find(e => e._id === update);
+    const { id, body } = payload;
+    let updateCurrent = state.updates.find(e => e._id === id.update);
     const index = state.updates.indexOf(updateCurrent);
-    const newTask = {
-      ...task,
-      done: false
-    };
-    state.updates[index].tasks.push(newTask);
+    state.updates[index].tasks.push(body);
   },
   PUSH_CATEGORY(state, payload) {
     state.categories.push(payload);
@@ -64,6 +60,39 @@ export const mutations = {
     Object.keys(body).forEach(e => {
       Vue.set(state.updates[index].tasks[indexTask], e, body[e]);
     });
+  },
+  REMOVE_CATEGORY_PROJECT(state, payload) {
+    const updateCurrent = state.updates.find(e => e._id === payload.id.update);
+    const updateIndex = state.updates.indexOf(updateCurrent);
+    const taskToDeleteByIndex = [];
+    let i = 0;
+
+    const category = state.updates[updateIndex].categories.find(
+      e => e === payload.id.category
+    );
+
+    if (category) {
+      const indexCategory = state.updates[updateIndex].categories.indexOf(
+        category
+      );
+      updateCurrent.tasks.forEach((task, index) => {
+        if (task.category === category) {
+          taskToDeleteByIndex.push(index);
+        }
+      });
+      taskToDeleteByIndex.forEach(e => {
+        Vue.delete(state.updates[updateIndex].tasks, e - i);
+        i++;
+      });
+      Vue.delete(state.updates[updateIndex].categories, indexCategory);
+    }
+  },
+  ADD_CATEGORY_PROJECT(state, payload) {
+    const { idUpdate, idCategory } = payload;
+    const currentCategory = state.categories.find(e => e._id === idCategory);
+    const updateCurrent = state.updates.find(e => e._id === idUpdate);
+    const updateIndex = state.updates.indexOf(updateCurrent);
+    state.updates[updateIndex].categories.push(currentCategory._id);
   }
 };
 
@@ -72,28 +101,53 @@ export const actions = {
     let { data } = await axios.get("/v1/categories");
     commit("SET_CATEGORIES", data);
   },
+
   async fetchData({ commit }) {
     const { data } = await axios.get("/v1/projects");
     commit("SET_UPDATES", data);
   },
+
+  /*
+  payload = {
+    id: {
+      update: ID,
+      category: ID
+    },
+    body: {
+      description: STRING
+      name: STRING
+    }
+  }
+  */
   async addTask({ commit }, payload) {
-    const { update, ...task } = payload;
-    const sendTask = {
-      ...task,
-      done: false
-    };
+    const { id, body } = payload;
     const { data } = await axios.post(
-      "/v1/projects/" + update + "/tasks",
-      sendTask
+      "/v1/projects/" + id.update + "/tasks",
+      body
     );
+    //Mongoose send all the document
     const manyTasks = data.tasks.filter(
-      e => e.description === task.description
+      e => e.description === body.description
     );
-    const uniqueTask = manyTasks.filter(e => e.name === task.name);
+    const uniqueTask = manyTasks.filter(e => e.name === body.name);
     let currentTask = payload;
-    currentTask._id = uniqueTask[0]._id;
+    currentTask.body._id = uniqueTask[0]._id;
     commit("PUSH_TASK", currentTask);
   },
+
+  /*
+    payload = {
+      id: {
+        task: ID,
+        update: ID
+      },
+      body: {
+        done: Boolean,
+        description: String,
+        name: String
+      }
+    }
+  */
   async updateTask({ commit }, payload) {
     const response = await axios.put(
       "/v1/projects/tasks/" + payload.id.task,
@@ -102,14 +156,72 @@ export const actions = {
     console.log(response);
     commit("EDIT_TASK", payload);
   },
+
+  /*
+    payload = {
+      name: String
+    }
+  */
   async addCategory({ commit }, payload) {
-    await axios.post("/v1/categories", payload);
-    commit("PUSH_CATEGORY", payload);
+    const { data } = await axios.post("/v1/categories", payload);
+    commit("PUSH_CATEGORY", data);
   },
+
+  /*
+    payload = {
+      id: {
+        update: ID
+      },
+      body: {
+        name:String
+      }
+    }
+  */
+  async addCategoryProject({ commit, state }, payload) {
+    const currentCategory = state.categories.find(
+      e => e.name === payload.body.name
+    );
+    if (!currentCategory) {
+      const { data } = await axios.post("/v1/categories", payload.body);
+      const newPayload = { idUpdate: payload.id.update, idCategory: data._id };
+      await commit("PUSH_CATEGORY", data);
+      await commit("ADD_CATEGORY_PROJECT", newPayload);
+      await axios.patch("/v1/projects/" + payload.id.update + "/categories", {
+        categories: [data._id]
+      });
+    } else {
+      const currentCategory = state.categories.find(
+        e => e.name === payload.body.name
+      );
+      const newPayload = {
+        idUpdate: payload.id.update,
+        idCategory: currentCategory._id
+      };
+      axios.patch("/v1/projects/" + payload.id.update + "/categories", {
+        categories: [currentCategory._id]
+      });
+      commit("ADD_CATEGORY_PROJECT", newPayload);
+    }
+  },
+
+  /*
+    payload = {
+      taskId = ID,
+      updateId = ID
+    }
+  */
   async removeTask({ commit }, payload) {
     await axios.delete("/v1/projects/tasks/" + payload.taskId);
     commit("REMOVE_TASK", payload);
   },
+
+  /*
+    payload = {
+      name: String,
+      version: String
+      date: Date
+    }
+  */
   async addUpdate({ commit }, payload) {
     const { data } = await axios.post("/v1/projects", {
       name: payload.name,
@@ -118,20 +230,20 @@ export const actions = {
     });
     commit("PUSH_UPDATE", data);
   },
-  async addCategoryAndTasks({ commit, dispatch }, payload) {
-    const { data } = await axios.post("/v1/categories", {
-      name: payload.categoryName
-    });
-    commit("PUSH_CATEGORY", data);
-    payload.tasks.forEach(task => {
-      task.category = data._id;
-      dispatch("addTask", task);
-    });
+
+  async removeCategoryFromProject({ commit }, payload) {
+    await axios.patch(
+      "v1/projects/" + payload.id.update + "/categories/remove",
+      {
+        categories: [payload.id.category]
+      }
+    );
+    commit("REMOVE_CATEGORY_PROJECT", payload);
   },
-  async removeCategory({ commit }, payload) {
-    await axios.delete("/v1/categories/" + payload);
-    commit("REMOVE_CATEGORY", payload);
-  },
+
+  /*
+    payload = IdUpdate (ID)
+  */
   async removeProject({ commit }, payload) {
     await axios.delete("/v1/projects/" + payload);
     commit("REMOVE_UPDATE", payload);
@@ -154,5 +266,8 @@ export const getters = {
   },
   categoriesByName: state => payload => {
     return state.categories.find(e => e.name === payload.name);
+  },
+  categoriesById: state => payload => {
+    return state.categories.find(e => e._id === payload._id);
   }
 };

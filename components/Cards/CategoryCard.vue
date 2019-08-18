@@ -14,9 +14,7 @@
     >
       expand_less
     </i>
-    <i
-      class="material-icons delete-category red"
-      @click="removeCategory(category._id)"
+    <i class="material-icons delete-category red" @click="deleteCategory()"
       >delete_forever</i
     >
     <div class="flex-center tasks-done">
@@ -27,7 +25,7 @@
         check_circle_outline
       </i>
     </div>
-    <h4 class="title-category margin-height-24">{{ category.name }}</h4>
+    <h4 class="title-category margin-height-24">{{ categoryFull.name }}</h4>
     <div v-if="showCategory" class="flex-center" style="width:100%;">
       <TaskCard
         v-for="(task, index) in tasksByCategories"
@@ -86,7 +84,7 @@ export default {
   },
   props: {
     category: {
-      type: Object,
+      type: String,
       default: () => {
         return {};
       }
@@ -103,19 +101,23 @@ export default {
       showFormTask: false,
       taskToAdd: {
         name: "",
-        description: ""
+        description: "",
+        done: false
       },
       showCategory: false,
       payload: {
         update: this.id,
-        category: this.category._id
+        category: this.category
       }
     };
   },
   computed: {
-    ...mapGetters(["tasks"]),
+    ...mapGetters(["tasks", "categoriesById"]),
     tasksByCategories() {
       return this.tasks(this.payload);
+    },
+    categoryFull() {
+      return this.categoriesById({ _id: this.category });
     },
     tasksDone() {
       const result = this.tasksByCategories.filter(e => e.done === true);
@@ -123,16 +125,30 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["addTask", "removeCategory"]),
+    ...mapActions(["addTask", "removeCategoryFromProject"]),
     async addTaskRequest() {
       if (this.taskToAdd.name !== "" && this.taskToAdd.description !== "") {
         const taskInfos = {
-          category: this.category._id,
-          update: this.id,
-          ...this.taskToAdd
+          id: {
+            category: this.categoryFull._id,
+            update: this.id
+          },
+          body: {
+            ...this.taskToAdd,
+            category: this.categoryFull._id
+          }
         };
         await this.addTask(taskInfos);
       }
+    },
+    deleteCategory() {
+      const payload = {
+        id: {
+          update: this.id,
+          category: this.category
+        }
+      };
+      this.removeCategoryFromProject(payload);
     }
   }
 };
