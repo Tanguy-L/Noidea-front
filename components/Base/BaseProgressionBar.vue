@@ -2,6 +2,21 @@
   <div class="container-bar">
     <div ref="bar" class="progress-bar"></div>
     <div class="blue green-bar" :style="widthPercentage"></div>
+    <p
+      v-if="percentage === 100"
+      class="bar-text"
+      style="width:100%;text-align:center;padding-top:16px;"
+    >
+      Terminé
+    </p>
+    <p
+      v-if="percentage > 0 && percentage < 100"
+      class="bar-text"
+      :style="positionLeft"
+    >
+      <i class="material-icons">arrow_drop_up</i>
+      {{ percentage | roundNumber }} %
+    </p>
   </div>
 </template>
 
@@ -9,6 +24,11 @@
 import Vue from "vue";
 
 export default {
+  filters: {
+    roundNumber(value) {
+      return Math.floor(value);
+    }
+  },
   props: {
     total: {
       type: Number,
@@ -26,7 +46,8 @@ export default {
   data() {
     return {
       isMounted: false,
-      widthPercentage: {}
+      widthPercentage: {},
+      positionLeft: {}
     };
   },
   computed: {
@@ -50,7 +71,14 @@ export default {
     matchHeight() {
       const result = (this.$refs.bar.clientWidth * this.percentage) / 100;
       let widthString = result + "px";
+      let resultMargin = result - 40;
+      let marginString = resultMargin + "px";
       Vue.set(this.widthPercentage, "width", widthString);
+      if (resultMargin < 0) {
+        Vue.set(this.positionLeft, "margin-left", widthString);
+      } else {
+        Vue.set(this.positionLeft, "margin-left", marginString);
+      }
     }
   }
 };
@@ -59,6 +87,16 @@ export default {
 <style scoped>
 .container-bar {
   position: relative;
+  height: 56px;
+}
+
+.bar-text {
+  text-align: center;
+  padding-top: 8px;
+  color: #f2d388;
+  width: 75px;
+  display: flex;
+  flex-direction: column;
 }
 
 .progress-bar {

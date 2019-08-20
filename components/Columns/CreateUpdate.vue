@@ -33,8 +33,10 @@ button {
   margin-left: 16px;
   transition: all 0.3s;
   width: 250px;
-  border: 1px white solid;
+  border: 1px black solid;
   background-color: rgba(36, 46, 62, 0);
+  color: black;
+  margin-top: 24px;
 }
 
 button:hover {

@@ -1,6 +1,11 @@
 <template>
   <div class="main-page" style="flex-wrap:wrap;">
-    <Update v-for="(el, index) in updates" :key="index" :id-update="el._id" />
+    <Update
+      v-for="(el, index) in updates"
+      :key="index"
+      style="margin-top:24px;"
+      :id-update="el._id"
+    />
     <CreateUpdate />
   </div>
 </template>
@@ -34,7 +39,7 @@ export default {
 .main-page {
   background-color: #d6d6d6;
   padding-top: 24px;
-  height: calc(100% - 96px);
+  min-height: calc(100% - 80px);
   display: flex;
 }
 </style>

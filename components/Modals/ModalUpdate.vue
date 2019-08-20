@@ -1,6 +1,12 @@
 <template>
   <Modal title-modal="Ajouter une nouvelle mise à jour">
-    <div class="modal-container">
+    <div v-if="errors.length" class="modal-container">
+      <p>Pensez à corriger les erreurs suivantes :</p>
+      <ul>
+        <li v-for="error in errors" :key="error.index">{{ error }}</li>
+      </ul>
+    </div>
+    <section class="modal-container" @:keyup.enter="SendUpdate">
       <div class="modal-input margin-top-16">
         <label for="category-name">Nom de la maj: </label>
         <input
@@ -14,7 +20,7 @@
         <label for="category-name">version de la maj: </label>
         <input
           v-model="update.version"
-          placeholder="v1.0.0"
+          placeholder="1.0.0"
           type="text"
           name="category-name"
         />
@@ -28,15 +34,12 @@
         ></vue-datepicker-local>
       </div>
       <div style="width:100%;display:flex;justify-content:center">
-        <button
-          class="button-add-task green margin-height-16"
-          @click="SendUpdate"
-        >
+        <button class="green margin-height-16" @click="SendUpdate">
           Valider
         </button>
         <button class="red" @click="exitModal()">quitter</button>
       </div>
-    </div>
+    </section>
   </Modal>
 </template>
 
@@ -51,8 +54,8 @@ export default {
   data() {
     return {
       update: {
-        name: "",
-        version: "",
+        name: null,
+        version: null,
         date: new Date()
       },
       local: {
@@ -68,7 +71,8 @@ export default {
         weeks: "Su_Mo_Tu_We_Th_Fr_Sa".split("_"), // weeks
         cancelTip: "Cancel", // default text for cancel button
         submitTip: "Submit" // default text for submit button
-      }
+      },
+      errors: []
     };
   },
   methods: {
@@ -77,13 +81,28 @@ export default {
       this.$emit("closeModal");
     },
     async SendUpdate() {
-      const regexVersion = /\b[v][\d]\b\.\b[\d]\b\.\b[\d]\b/;
-      if (
-        this.update.name !== "" &&
-        this.update.version !== "" &&
-        regexVersion.test(this.update.version)
-      ) {
-        this.addUpdate(this.update);
+      this.errors = [];
+      const regexVersion = /\b[\d]\b\.\b[\d]\b\.\b[\d]\b/;
+      const updateLocal = { ...this.update };
+      updateLocal.version = "v" + this.update.version;
+
+      if (!this.update.name) {
+        this.errors.push("Le nom de la mise à jour est requis");
+      }
+
+      if (!this.update.version) {
+        this.errors.push("La version de la mise à jour est requis");
+      }
+
+      if (this.update.version && !regexVersion.test(this.update.version)) {
+        this.errors.push(
+          "La version doit être composé de 3 chiffres séparés par des points comme => 1.0.0"
+        );
+      }
+
+      if (!this.errors.length) {
+        this.addUpdate(updateLocal);
+        this.$emit("closeModal");
       }
     }
   }
@@ -91,12 +110,25 @@ export default {
 </script>
 
 <style scoped>
+.button-add-task {
+  border: none;
+  color: white;
+  font-size: 12px;
+  line-height: 24px;
+  padding: 0 25px;
+}
+
+.button-add-task:hover {
+  cursor: pointer;
+}
+
 .modal-container {
   width: 70%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   font-family: "Montserrat", sans-serif;
+  z-index: 6;
 }
 
 .modal-input {

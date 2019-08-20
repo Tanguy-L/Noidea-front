@@ -8,12 +8,12 @@
         <p class="margin-height-16 text">
           No-idea est un projet qui permet de manipuler des tickets. Il n'y a
           pour l'instant pas d'authentification nécessaire, ce site est une
-          démo.
+          démo, vous êtes libre de l'essayer comme vous souhaitez.
         </p>
         <p class="margin-height-16 text">
           Le site se présente un peu comme trello, chaque colonne représente des
-          "mise à jours", pour chacune d'entre elle, il est possible d'ajouter
-          des catégories, et chaque catégorie à ses propres tâches.
+          "mises à jours", pour chacune d'entre elles, il est possible d'ajouter
+          des catégories, et chaque catégorie a ses propres tâches.
         </p>
         <p class="margin-height-16 text">
           Le projet est encore en pleine évolution et d'autres features vont
@@ -84,7 +84,7 @@ export default {};
 <style scoped>
 .parent-container {
   background-color: rgb(243, 243, 243);
-  height: calc(100% - 56px);
+  min-height: calc(100% - 56px);
 }
 
 .container-techno-card {
@@ -134,11 +134,41 @@ li {
 .black {
   color: rgb(22, 58, 87);
   text-align: center;
+  font-weight: 600;
 }
 
 .text {
   color: black;
   max-width: 65%;
   text-align: center;
+}
+
+@media screen and (max-width: 640px) {
+  .container-content {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 340px) {
+  .text {
+    min-width: 80%;
+    font-size: 12px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 24px;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  li {
+    font-size: 12px;
+  }
 }
 </style>

@@ -1,5 +1,11 @@
 <template>
   <div class="main-category flex-center margin-top-16 center-block">
+    <p
+      v-if="indexOneCategory(category) === 0 && indexOneProject(id) === 0"
+      style="width:100%;text-align:center;font-size:12px;line-height:16px;"
+    >
+      (Cliquez sur la petite flèche)
+    </p>
     <i
       v-if="showCategory"
       class="material-icons expand"
@@ -50,6 +56,12 @@
       </button>
       <transition name="fade">
         <div v-if="showFormTask" class="form-task">
+          <div v-if="errors.length">
+            <p>Pensez à corriger les erreurs suivantes :</p>
+            <ul>
+              <li v-for="error in errors" :key="error.index">{{ error }}</li>
+            </ul>
+          </div>
           <div class="full margin-top-8">
             <label for="name-task">nom: </label>
             <input id="name-task" v-model="taskToAdd.name" type="text" />
@@ -108,11 +120,17 @@ export default {
       payload: {
         update: this.id,
         category: this.category
-      }
+      },
+      errors: []
     };
   },
   computed: {
-    ...mapGetters(["tasks", "categoriesById"]),
+    ...mapGetters([
+      "tasks",
+      "categoriesById",
+      "indexOneCategory",
+      "indexOneProject"
+    ]),
     tasksByCategories() {
       return this.tasks(this.payload);
     },
@@ -127,7 +145,17 @@ export default {
   methods: {
     ...mapActions(["addTask", "removeCategoryFromProject"]),
     async addTaskRequest() {
-      if (this.taskToAdd.name !== "" && this.taskToAdd.description !== "") {
+      this.errors = [];
+
+      if (!this.taskToAdd.name) {
+        this.errors.push("Votre tâche n'a pas de nom");
+      }
+
+      if (!this.taskToAdd.description) {
+        this.errors.push("Votre tâche n'a pas de description");
+      }
+
+      if (!this.errors.length) {
         const taskInfos = {
           id: {
             category: this.categoryFull._id,
@@ -139,6 +167,7 @@ export default {
           }
         };
         await this.addTask(taskInfos);
+        this.showFormTask = !this.showFormTask;
       }
     },
     deleteCategory() {

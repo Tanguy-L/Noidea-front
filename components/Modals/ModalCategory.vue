@@ -1,5 +1,11 @@
 <template>
   <Modal title-modal="Ajouter une nouvelle catégorie">
+    <div v-if="errors.length" class="modal-container">
+      <p>Pensez à corriger les erreurs suivantes :</p>
+      <ul>
+        <li v-for="error in errors" :key="error.index">{{ error }}</li>
+      </ul>
+    </div>
     <div class="modal-container">
       <div class="modal-input margin-top-16">
         <label for="category-name">Nom de la catégorie: </label>
@@ -63,7 +69,8 @@ export default {
       payload: {
         categoryName: "",
         tasks: []
-      }
+      },
+      errors: []
     };
   },
   computed: {
@@ -95,10 +102,27 @@ export default {
           name: this.payload.categoryName
         }
       };
-      this.addCategoryProject(payload);
-      /* this.tasks.forEach(task => {
-          this.addTask
-        }); */
+
+      this.errors = [];
+
+      if (!this.payload.categoryName) {
+        this.errors.push("Il n'y pas de catégorie définit");
+      }
+
+      if (this.payload.tasks.length) {
+        this.payload.tasks.forEach(e => {
+          if (!e.name) {
+            this.errors.push("Il manque un nom à une tâche");
+          }
+          if (!e.description) {
+            this.errors.push("Il manque description à une tâche");
+          }
+        });
+      }
+      if (!this.errors.length) {
+        this.addCategoryProject(payload);
+        this.$emit("closeModal");
+      }
     }
   }
 };

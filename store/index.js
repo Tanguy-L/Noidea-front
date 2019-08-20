@@ -149,11 +149,7 @@ export const actions = {
     }
   */
   async updateTask({ commit }, payload) {
-    const response = await axios.put(
-      "/v1/projects/tasks/" + payload.id.task,
-      payload.body
-    );
-    console.log(response);
+    await axios.put("/v1/projects/tasks/" + payload.id.task, payload.body);
     commit("EDIT_TASK", payload);
   },
 
@@ -269,5 +265,13 @@ export const getters = {
   },
   categoriesById: state => payload => {
     return state.categories.find(e => e._id === payload._id);
+  },
+  indexOneCategory: state => payload => {
+    let category = state.categories.find(e => e._id === payload);
+    return state.categories.indexOf(category);
+  },
+  indexOneProject: state => payload => {
+    let update = state.updates.find(e => e._id === payload);
+    return state.updates.indexOf(update);
   }
 };
