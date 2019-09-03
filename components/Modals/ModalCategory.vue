@@ -1,11 +1,21 @@
 <template>
   <Modal title-modal="Ajouter une nouvelle catégorie">
-    <div v-if="errors.length" class="modal-container">
+    <div
+      v-if="errors.length"
+      class="modal-container"
+    >
       <p>Pensez à corriger les erreurs suivantes :</p>
       <ul>
-        <li v-for="error in errors" :key="error.index">{{ error }}</li>
+        <li
+          v-for="error in errors"
+          :key="error.index"
+        >{{ error }}</li>
       </ul>
     </div>
+    <i
+      class="material-icons close-icon"
+      @click="exitModal()"
+    >close</i>
     <div class="modal-container">
       <div class="modal-input margin-top-16">
         <label for="category-name">Nom de la catégorie: </label>
@@ -22,12 +32,19 @@
       :key="index"
       class="modal-container"
     >
-      <p style="width:100%;text-align:center;" class="margin-top-16">
+      <p
+        style="width:100%;text-align:center;"
+        class="margin-top-16"
+      >
         tâche {{ index + 1 }}
       </p>
       <div class="modal-input margin-top-16">
         <label for="name-task">Nom de la tâche: </label>
-        <input v-model="el.name" type="text" name="name-task" />
+        <input
+          v-model="el.name"
+          type="text"
+          name="name-task"
+        />
       </div>
       <div class="modal-input margin-top-16">
         <label for="description-task">description : </label>
@@ -37,13 +54,25 @@
           name="description-task"
         />
       </div>
-      <button class="red" @click="removeTask(index)">Supprimer tâche</button>
+      <button
+        class="red"
+        @click="removeTask(index)"
+      >Supprimer tâche</button>
     </div>
 
     <div class="row-buttons">
-      <button class="green" @click="addCategoryRequest()">Valider</button>
-      <button class="blue" @click="addRowTask()">Ajouter une tache</button>
-      <button class="red" @click="exitModal()">quitter</button>
+      <button
+        class="green"
+        @click="addCategoryRequest()"
+      >Valider</button>
+      <button
+        class="blue"
+        @click="addRowTask()"
+      >Ajouter une tache</button>
+      <button
+        class="red"
+        @click="exitModal()"
+      >quitter</button>
     </div>
   </Modal>
 </template>
@@ -64,7 +93,7 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     return {
       payload: {
         categoryName: "",
@@ -78,10 +107,10 @@ export default {
   },
   methods: {
     ...mapActions(["addCategory", "addCategoryProject", "addTask"]),
-    exitModal() {
+    exitModal () {
       this.$emit("closeModal");
     },
-    addRowTask() {
+    addRowTask () {
       let randomTask = {
         name: "test",
         description: "test",
@@ -90,10 +119,10 @@ export default {
       };
       this.payload.tasks.push(randomTask);
     },
-    removeTask(index) {
+    removeTask (index) {
       return this.payload.tasks.splice(index);
     },
-    addCategoryRequest() {
+    addCategoryRequest () {
       const payload = {
         id: {
           update: this.idUpdate
@@ -135,6 +164,7 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
   font-family: "Montserrat", sans-serif;
+  position: relative;
 }
 
 .modal-input {
@@ -148,5 +178,26 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+.close-icon {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  color: grey;
+}
+
+@media screen and (max-width: 1400px) {
+  .modal-container {
+    width: 100%;
+  }
+
+  .modal-input > label {
+    width: 100%;
+  }
+}
+
+.close-icon:hover {
+  cursor: pointer;
 }
 </style>

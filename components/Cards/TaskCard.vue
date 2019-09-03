@@ -12,7 +12,7 @@
           class="material-icons task-button yellow"
           >edit</i
         >
-        <i class="material-icons task-button red" @click="deleteTask()"
+        <i class="material-icons task-button" @click="deleteTask()"
           >delete_forever</i
         >
       </div>
@@ -73,20 +73,15 @@ export default {
 .container {
   width: 90%;
   justify-content: space-between;
-  padding: 0 8px;
-}
-.container-task {
-  width: 100%;
-  padding: 0 16px;
-  align-items: baseline;
-  min-height: 56px;
-  width: 90%;
-  justify-content: space-between;
-  padding: 0 8px;
 }
 
-p {
-  color: black;
+.container-task {
+  width: 100%;
+  padding: 8px 16px;
+  min-height: 56px;
+  justify-content: space-between;
+  margin: auto;
+  align-items: center;
 }
 
 .task-right {
@@ -100,9 +95,8 @@ p {
 }
 
 .task-button {
-  color: white;
-  padding: 4px;
-  box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.082);
+  color: #c85656;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .task-button:hover {

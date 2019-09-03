@@ -1,38 +1,46 @@
 <template>
   <div class="main-category flex-center margin-top-16 center-block">
-    <p
+    <h4 class="title-category margin-height-24">{{ categoryFull.name }}</h4>
+    <div class="flex-center">
+      <div class="flex-center tasks-done">
+        <p class="text-tasks-done">
+          {{ tasksDone }} / {{ tasksByCategories.length }}
+        </p>
+        <i class="material-icons text-tasks-done">
+          check_circle_outline
+        </i>
+      </div>
+      <i class="material-icons delete-category" @click="deleteCategory()"
+        >delete_forever</i
+      >
+    </div>
+    <!-- <p
       v-if="indexOneCategory(category) === 0 && indexOneProject(id) === 0"
       style="width:100%;text-align:center;font-size:12px;line-height:16px;"
     >
       (Cliquez sur la petite flèche)
-    </p>
-    <i
-      v-if="showCategory"
-      class="material-icons expand"
-      @click="showCategory = !showCategory"
-    >
-      expand_more
-    </i>
-    <i
-      v-else
-      class="material-icons expand"
-      @click="showCategory = !showCategory"
-    >
-      expand_less
-    </i>
-    <i class="material-icons delete-category red" @click="deleteCategory()"
-      >delete_forever</i
-    >
-    <div class="flex-center tasks-done">
-      <p class="text-tasks-done">
-        {{ tasksDone }} / {{ tasksByCategories.length }}
-      </p>
-      <i class="material-icons text-tasks-done">
-        check_circle_outline
+    </p> -->
+    <div class="container-show-arrow">
+      <i
+        v-if="showCategory"
+        class="material-icons expand hide"
+        @click="showCategory = !showCategory"
+      >
+        arrow_drop_down_circle
+      </i>
+      <i
+        v-else
+        class="material-icons expand"
+        @click="showCategory = !showCategory"
+      >
+        arrow_drop_down_circle
       </i>
     </div>
-    <h4 class="title-category margin-height-24">{{ categoryFull.name }}</h4>
-    <div v-if="showCategory" class="flex-center" style="width:100%;">
+    <div
+      v-if="showCategory"
+      class="flex-center container-tasks"
+      style="width:100%;"
+    >
       <TaskCard
         v-for="(task, index) in tasksByCategories"
         :id="id"
@@ -185,15 +193,21 @@ export default {
 
 <style scoped>
 .main-category {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0);
   width: 90%;
   position: relative;
+  border: #f2d388 solid 2px;
+  color: white;
+}
+
+.container-tasks {
+  border-top: #f2d388 solid 2px;
 }
 
 .main-category > input,
 p,
 label {
-  color: black;
+  color: white;
 }
 
 .container {
@@ -208,7 +222,6 @@ label {
 }
 
 .button-add-task {
-  height: 30px;
   width: 170px;
   font-family: "Montserrat", sans-serif;
   color: white;
@@ -216,18 +229,22 @@ label {
   display: block;
 }
 
-p {
-  color: black;
+.container-show-arrow {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
 }
 
 .delete-category {
-  position: absolute;
-  right: 0;
-  color: white;
+  margin-right: 8px;
 }
 
 .delete-category:hover {
   cursor: pointer;
+}
+
+.hide {
+  transform: rotate(0.5turn);
 }
 
 .task-right {
@@ -246,11 +263,15 @@ p {
 
 .form-task {
   width: 80%;
+  margin: auto;
 }
 
 .tasks-done {
-  width: 100%;
   justify-content: flex-start;
+}
+
+.flex-center {
+  justify-content: space-between;
 }
 
 .text-tasks-done {
