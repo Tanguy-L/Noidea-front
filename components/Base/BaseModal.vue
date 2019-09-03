@@ -1,7 +1,9 @@
 <template>
-  <div class="modal">
-    <h4 class="margin-height-24">{{ titleModal }}</h4>
-    <slot />
+  <div class="background-modal">
+    <div class="modal">
+      <h4 class="margin-height-24">{{ titleModal }}</h4>
+      <slot />
+    </div>
   </div>
 </template>
 
@@ -19,6 +21,20 @@ export default {
 </script>
 
 <style scoped>
+.background-modal {
+  background: rgba(0, 0, 0, 0.322);
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  z-index: 5;
+}
+
 .modal {
   position: fixed;
   top: 50%;

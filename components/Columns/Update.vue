@@ -1,18 +1,18 @@
 <template>
   <div
     class="container-column"
-    @mouseenter="showTools = !showTools"
-    @mouseleave="showTools = !showTools"
+    @mouseover="showTools = true"
+    @mouseleave="showTools = false"
   >
     <div class="column-update">
-      <Bar
-        v-if="allTasks > 0"
-        :value="tasksDone"
-        :total="allTasks"
-      />
+      <Bar v-if="allTasks > 0" :value="tasksDone" :total="allTasks" />
       <h3 class="margin-height-24 ">{{ currentUpdate.name }}</h3>
-      <p class="text-full-width">{{ currentUpdate.date | formatDate }}</p>
-      <p class="text-full-width">{{ currentUpdate.versionProject }}</p>
+      <p class="text-full-width text-white">
+        {{ currentUpdate.date | formatDate }}
+      </p>
+      <p class="text-full-width text-white">
+        {{ currentUpdate.versionProject }}
+      </p>
       <CategoryCard
         v-for="(el, index) in currentUpdate.categories"
         :id="idUpdate"
@@ -24,20 +24,15 @@
         :id-update="idUpdate"
         @closeModal="showModalCategory = false"
       />
-      <button
-        class="blue add-category-button center-block"
-        @click="showModalCategory = true"
-      >
-        <span> Ajouter une catégorie</span>
-      </button>
+      <BaseButton
+        text-button="Ajouter une catégorie"
+        @click.native="showModalCategory = true"
+      />
     </div>
     <div class="container-tools">
       <transition name="fadeTools">
         <div v-if="showTools">
-          <button
-            class="tools-button red"
-            @click="removeProject(idUpdate)"
-          >
+          <button class="tools-button red" @click="removeProject(idUpdate)">
             <i class="material-icons">delete_forever</i>
           </button>
           <button class="tools-button blue">
@@ -53,16 +48,18 @@
 import CategoryCard from "@/components/Cards/CategoryCard.vue";
 import ModalCategory from "@/components/Modals/ModalCategory.vue";
 import Bar from "@/components/Base/BaseProgressionBar.vue";
+import BaseButton from "@/components/Base/BaseButton.vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
     CategoryCard,
     ModalCategory,
-    Bar
+    Bar,
+    BaseButton
   },
   filters: {
-    formatDate: function (value) {
+    formatDate: function(value) {
       if (!value) return "";
       let currentDate = new Date(value);
       let monthNames = [
@@ -99,7 +96,7 @@ export default {
       }
     }
   },
-  data () {
+  data() {
     return {
       showModalCategory: false,
       showTools: false
@@ -107,14 +104,14 @@ export default {
   },
   computed: {
     ...mapGetters(["categories", "updateByIndex", "updates"]),
-    currentUpdate () {
+    currentUpdate() {
       return this.updateByIndex(this.idUpdate);
     },
-    tasksDone () {
+    tasksDone() {
       const result = this.currentUpdate.tasks.filter(e => e.done === true);
       return result.length;
     },
-    allTasks () {
+    allTasks() {
       return this.currentUpdate.tasks.length;
     }
   },
@@ -153,35 +150,8 @@ export default {
   text-align: center;
 }
 
-.blue:hover:before {
-  width: 100%;
-}
-
-.add-category-button {
-  position: relative;
-  z-index: 1;
-}
-
 .container-tools {
   width: 40px;
-}
-
-/* .add-category-button:hover {
-  color: black;
-} */
-
-.add-category-button:before {
-  background-color: rgb(22, 47, 70);
-  content: "";
-  width: 0%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  position: absolute;
-  transition: 0.2s ease-in-out;
-  z-index: -1;
-  border-bottom: 1px solid white;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.315);
 }
 
 .add-category {

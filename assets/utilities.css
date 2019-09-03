@@ -15,6 +15,10 @@
   background-color: #56c856;
 }
 
+.text-white {
+  color: white;
+}
+
 .margin-height-16 {
   margin: 16px 0;
 }

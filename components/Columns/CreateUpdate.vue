@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <button class="text-big-button" @click="showModal = !showModal">
       Ajouter une mise à jour
     </button>
@@ -23,6 +23,10 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  margin-left: 50px;
+}
+
 button {
   display: block;
   width: 200px;
@@ -30,7 +34,6 @@ button {
   padding: 0;
   margin: 0;
   height: 800px;
-  margin-left: 16px;
   transition: all 0.3s;
   width: 250px;
   border: 1px black solid;

@@ -10,7 +10,7 @@
           check_circle_outline
         </i>
       </div>
-      <i class="material-icons delete-category" @click="deleteCategory()"
+      <i class="material-icons delete-category red" @click="deleteCategory()"
         >delete_forever</i
       >
     </div>
@@ -200,10 +200,6 @@ export default {
   color: white;
 }
 
-.container-tasks {
-  border-top: #f2d388 solid 2px;
-}
-
 .main-category > input,
 p,
 label {
@@ -219,6 +215,7 @@ label {
 .title-category {
   width: 100%;
   text-align: center;
+  margin-top: 32px;
 }
 
 .button-add-task {
@@ -236,7 +233,10 @@ label {
 }
 
 .delete-category {
-  margin-right: 8px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 2px;
 }
 
 .delete-category:hover {

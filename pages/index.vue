@@ -11,14 +11,9 @@
           démo, vous êtes libre de l'essayer comme vous souhaitez.
         </p>
         <p class="margin-height-16 text">
-          Le site se présente un peu comme trello, chaque colonne représente des
+          Le site est tout simplement un kanban, chaque colonne représente des
           "mises à jours", pour chacune d'entre elles, il est possible d'ajouter
           des catégories, et chaque catégorie a ses propres tâches.
-        </p>
-        <p class="margin-height-16 text">
-          Le projet est encore en pleine évolution et d'autres features vont
-          faire leur apparition au cours du temps, tout comme le design sera
-          susceptible de changer.
         </p>
       </div>
       <div class="container-techno-card">

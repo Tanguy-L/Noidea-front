@@ -1,8 +1,6 @@
 <template>
   <div class="modal-container">
-    <form class="modal-input margin-top-16">
-      <div v-for=""></div>
-    </form>
+    <form class="modal-input margin-top-16"></form>
   </div>
 </template>
 

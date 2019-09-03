@@ -12,11 +12,27 @@
           class="material-icons task-button yellow"
           >edit</i
         >
-        <i class="material-icons task-button" @click="deleteTask()"
+        <i
+          class="material-icons task-button task-delete-button"
+          @click="deleteTask()"
           >delete_forever</i
         >
+        <i
+          v-if="!showDescription"
+          class="material-icons task-button"
+          @click="showDescription = true"
+          >keyboard_arrow_down</i
+        >
+        <i
+          v-if="showDescription"
+          class="material-icons task-button"
+          @click="showDescription = false"
+          >keyboard_arrow_up</i
+        >
       </div>
-      <p class="task-description margin-top-8">{{ task.description }}</p>
+      <p v-if="showDescription" class="task-description margin-top-8">
+        {{ task.description }}
+      </p>
     </div>
   </div>
 </template>
@@ -41,7 +57,8 @@ export default {
   },
   data() {
     return {
-      isDone: this.task.done
+      isDone: this.task.done,
+      showDescription: false
     };
   },
   methods: {
@@ -73,6 +90,7 @@ export default {
 .container {
   width: 90%;
   justify-content: space-between;
+  min-height: 48px;
 }
 
 .container-task {
@@ -81,7 +99,8 @@ export default {
   min-height: 56px;
   justify-content: space-between;
   margin: auto;
-  align-items: center;
+  align-items: baseline;
+  border-top: #f2d388 solid 1px;
 }
 
 .task-right {
@@ -95,8 +114,11 @@ export default {
 }
 
 .task-button {
-  color: #c85656;
   background-color: rgba(0, 0, 0, 0);
+}
+
+.task-delete-button {
+  color: #c85656;
 }
 
 .task-button:hover {
