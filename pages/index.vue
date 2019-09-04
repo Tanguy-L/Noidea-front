@@ -116,7 +116,7 @@ export default {};
 
 h3 {
   width: 100%;
-  color: #568bc8;
+  color: black;
 }
 
 ul {
