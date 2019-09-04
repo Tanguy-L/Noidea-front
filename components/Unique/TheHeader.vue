@@ -20,6 +20,11 @@ export default {};
   color: black;
   font-family: "Montserrat";
   margin: 0 8px;
+  transition: all 0.2s ease-in;
+}
+
+.text-link:hover {
+  border-bottom: 1px black solid;
 }
 
 .text-link:focus {

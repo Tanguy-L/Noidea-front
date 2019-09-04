@@ -23,10 +23,9 @@ export default {
 <style scoped>
 .background-modal {
   background: rgba(0, 0, 0, 0.322);
-  position: absolute;
   height: 100%;
   width: 100%;
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;

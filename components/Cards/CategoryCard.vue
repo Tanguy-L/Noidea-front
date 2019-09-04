@@ -14,12 +14,6 @@
         >delete_forever</i
       >
     </div>
-    <!-- <p
-      v-if="indexOneCategory(category) === 0 && indexOneProject(id) === 0"
-      style="width:100%;text-align:center;font-size:12px;line-height:16px;"
-    >
-      (Cliquez sur la petite flèche)
-    </p> -->
     <div class="container-show-arrow">
       <i
         v-if="showCategory"
@@ -36,61 +30,63 @@
         arrow_drop_down_circle
       </i>
     </div>
-    <div
-      v-if="showCategory"
-      class="flex-center container-tasks"
-      style="width:100%;"
-    >
-      <TaskCard
-        v-for="(task, index) in tasksByCategories"
-        :id="id"
-        :key="index"
-        :task="task"
-      />
-      <button
-        v-if="!showFormTask"
-        class="button-add-task blue center-block"
-        @click="showFormTask = !showFormTask"
+    <transition name="fade">
+      <div
+        v-if="showCategory"
+        class="flex-center container-tasks"
+        style="width:100%;"
       >
-        Ajouter une tâche
-      </button>
+        <TaskCard
+          v-for="(task, index) in tasksByCategories"
+          :id="id"
+          :key="index + '-' + task.name"
+          :task="task"
+        />
+        <button
+          v-if="!showFormTask"
+          class="button-add-task blue center-block"
+          @click="showFormTask = !showFormTask"
+        >
+          Ajouter une tâche
+        </button>
 
-      <button
-        v-else
-        class="button-add-task red center-block"
-        @click="showFormTask = !showFormTask"
-      >
-        Annuler
-      </button>
-      <transition name="fade">
-        <div v-if="showFormTask" class="form-task">
-          <div v-if="errors.length">
-            <p>Pensez à corriger les erreurs suivantes :</p>
-            <ul>
-              <li v-for="error in errors" :key="error.index">{{ error }}</li>
-            </ul>
+        <button
+          v-else
+          class="button-add-task red center-block"
+          @click="showFormTask = !showFormTask"
+        >
+          Annuler
+        </button>
+        <transition name="fade">
+          <div v-if="showFormTask" class="form-task">
+            <div v-if="errors.length">
+              <p>Pensez à corriger les erreurs suivantes :</p>
+              <ul>
+                <li v-for="error in errors" :key="error.index">{{ error }}</li>
+              </ul>
+            </div>
+            <div class="full margin-top-8">
+              <label for="name-task">nom: </label>
+              <input id="name-task" v-model="taskToAdd.name" type="text" />
+            </div>
+            <div class="full margin-top-8">
+              <label for="description-task">description: </label>
+              <input
+                id="description-task"
+                v-model="taskToAdd.description"
+                type="text"
+              />
+            </div>
+            <button
+              class="button-add-task center-block green margin-height-16"
+              @click="addTaskRequest()"
+            >
+              Valider
+            </button>
           </div>
-          <div class="full margin-top-8">
-            <label for="name-task">nom: </label>
-            <input id="name-task" v-model="taskToAdd.name" type="text" />
-          </div>
-          <div class="full margin-top-8">
-            <label for="description-task">description: </label>
-            <input
-              id="description-task"
-              v-model="taskToAdd.description"
-              type="text"
-            />
-          </div>
-          <button
-            class="button-add-task center-block green margin-height-16"
-            @click="addTaskRequest()"
-          >
-            Valider
-          </button>
-        </div>
-      </transition>
-    </div>
+        </transition>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -288,15 +284,35 @@ label {
   width: 125px;
 }
 
+.expand:hover {
+  cursor: pointer;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-to,
+.fade-leave {
+  opacity: 1;
+}
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.6s;
+  transition: opacity 200ms ease-out;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+
+.list-enter,
+.list-leave-to {
   opacity: 0;
 }
 
-.expand:hover {
-  cursor: pointer;
+.list-enter-to,
+.list-leave {
+  opacity: 1;
+}
+
+.list-enter-active,
+.list-leave-active {
+  transition: opacity 200ms ease-out;
 }
 </style>

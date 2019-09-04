@@ -17,8 +17,8 @@
         </p>
       </div>
       <div class="container-techno-card">
-        <h3>Ce que j'ai appris avec ce projet</h3>
-        <div>
+        <h3 class="title-techno">Ce que j'ai appris avec ce projet</h3>
+        <div class="techno-card">
           <p class="black">
             Backend :
           </p>
@@ -33,7 +33,7 @@
             </li>
           </ul>
         </div>
-        <div>
+        <div class="techno-card">
           <p class="black">
             Frontend :
           </p>
@@ -54,7 +54,7 @@
             </li>
           </ul>
         </div>
-        <div>
+        <div class="techno-card">
           <p class="black">
             Environnement de dévelopement :
           </p>
@@ -91,15 +91,70 @@ export default {};
   margin-top: 48px;
 }
 
+.techno-card {
+  padding: 16px;
+  background: #5c258d; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #4389a2,
+    #5c258d
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #4389a2,
+    #5c258d
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  color: white;
+  margin: 16px 32px;
+  border-radius: 2px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.342);
+}
+
+.techno-card > p {
+  color: white;
+}
+
 h3 {
   width: 100%;
   color: #568bc8;
+}
+
+ul {
+  padding: 0;
+}
+
+a {
+  color: white;
+  background-color: #4389a2;
+  padding: 8px;
+  text-decoration: none;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.137);
+  transition: all 0.2s ease-in;
+  margin-left: 8px;
+}
+
+a:hover {
+  background-color: #85d1ec;
 }
 
 .main-index {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+.title-techno {
+  position: relative;
+}
+
+.title-techno::before {
+  content: "";
+  width: 20%;
+  height: 2px;
+  position: absolute;
+  bottom: -16px;
+  left: 40%;
+  background-color: #4389a2;
 }
 
 .container-content {
@@ -109,6 +164,10 @@ h3 {
   align-items: center;
   flex-direction: column;
   min-height: 0;
+  background: linear-gradient(#e66465, #9198e5);
+  border-radius: 4px;
+  box-shadow: 0 6px 12px #00000040;
+  margin-top: 24px;
 }
 
 ul {
@@ -123,7 +182,7 @@ li {
 }
 
 .text-blue {
-  color: #568bc8;
+  color: #dbbe5e;
 }
 
 .black {
@@ -140,7 +199,11 @@ li {
 
 @media screen and (max-width: 640px) {
   .container-content {
-    width: 100%;
+    width: 90%;
+  }
+  h1 {
+    text-align: center;
+    font-size: 24px;
   }
 }
 
@@ -148,10 +211,6 @@ li {
   .text {
     min-width: 80%;
     font-size: 12px;
-  }
-  h1 {
-    text-align: center;
-    font-size: 24px;
   }
 
   h3 {

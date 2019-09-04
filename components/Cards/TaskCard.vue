@@ -30,9 +30,11 @@
           >keyboard_arrow_up</i
         >
       </div>
-      <p v-if="showDescription" class="task-description margin-top-8">
-        {{ task.description }}
-      </p>
+      <transition name="up">
+        <p v-if="showDescription" class="task-description margin-top-8">
+          {{ task.description }}
+        </p>
+      </transition>
     </div>
   </div>
 </template>
@@ -123,5 +125,15 @@ export default {
 
 .task-button:hover {
   cursor: pointer;
+}
+
+.up-enter-active,
+.up-leave-active {
+  transition: all 0.3s;
+  opacity: 0.6;
+}
+.up-enter, .up-leave-to /* .up-leave-active below version 2.1.8 */ {
+  transform: translateY(-50%);
+  opacity: 0;
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
   <div
-    class="container-column"
+    :class="showAllUpdate ? 'container-column' : 'container-empty'"
     @mouseover="showTools = true"
     @mouseleave="showTools = false"
   >
-    <div class="column-update">
+    <div v-if="showAllUpdate" class="column-update">
       <Bar v-if="allTasks > 0" :value="tasksDone" :total="allTasks" />
       <h3 class="margin-height-24 ">{{ currentUpdate.name }}</h3>
       <p class="text-full-width text-white">
@@ -29,6 +29,9 @@
         @click.native="showModalCategory = true"
       />
     </div>
+    <div v-else class="column-hide">
+      <h3 class="margin-height-24 rotate">{{ currentUpdate.name }}</h3>
+    </div>
     <div class="container-tools">
       <transition name="fadeTools">
         <div v-if="showTools">
@@ -37,6 +40,13 @@
           </button>
           <button class="tools-button blue">
             <i class="material-icons">edit</i>
+          </button>
+          <button
+            class="tools-button green"
+            @click="showAllUpdate = !showAllUpdate"
+          >
+            <i v-if="showAllUpdate" class="material-icons">navigate_before</i>
+            <i v-if="!showAllUpdate" class="material-icons">navigate_next</i>
           </button>
         </div>
       </transition>
@@ -99,7 +109,8 @@ export default {
   data() {
     return {
       showModalCategory: false,
-      showTools: false
+      showTools: false,
+      showAllUpdate: true
     };
   },
   computed: {
@@ -122,10 +133,13 @@ export default {
 </script>
 
 <style scoped>
+.rotate {
+  transform: rotate(-90deg);
+}
+
 .column-update {
-  overflow-y: auto;
+  overflow-y: hidden;
   width: 380px;
-  height: 100%;
   display: inline-block;
   background-color: #242e3e;
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.308);
@@ -133,9 +147,22 @@ export default {
 
 .container-column {
   width: 420px;
-  height: 800px;
   margin-left: 50px;
   display: flex;
+}
+
+.column-hide {
+  background-color: #242e3e;
+  height: 250px;
+  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 80px;
+}
+
+.column-hide > h3 {
+  margin: 0;
 }
 
 .tools-button {
@@ -179,6 +206,13 @@ export default {
   right: 0;
   top: 40px;
   color: white;
+}
+
+.container-empty {
+  height: 800px;
+  margin-left: 50px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .delete-category:hover {

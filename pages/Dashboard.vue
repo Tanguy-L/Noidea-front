@@ -1,5 +1,5 @@
 <template>
-  <div class="main-page" style="flex-wrap:wrap;">
+  <div class="main-page">
     <Update
       v-for="(el, index) in updates"
       :key="index"
@@ -38,8 +38,16 @@ export default {
 <style scoped>
 .main-page {
   background-color: #d6d6d6;
-  padding-top: 24px;
+  padding: 24px 0px;
   min-height: calc(100% - 80px);
   display: flex;
+  flex-wrap: wrap;
+}
+
+@media screen and (max-width: 640px) {
+  .main-page {
+    flex-wrap: nowrap;
+    overflow-y: auto;
+  }
 }
 </style>

@@ -152,4 +152,18 @@ h4 {
 .datepicker {
   border: 1px black solid;
 }
+
+@media screen and (max-width: 1400px) {
+  .modal-input {
+    flex-wrap: wrap;
+  }
+
+  label {
+    width: 100%;
+  }
+
+  .datepicker > input {
+    border: 1px solid black !important;
+  }
+}
 </style>
