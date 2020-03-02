@@ -4,37 +4,23 @@
       <img src="~/assets/images/logo-noidea.png" />
     </div>
     <div class="right">
-      <nuxt-link to="/" class="text-link">Accueil</nuxt-link>
-      <nuxt-link to="/dashboard" class="text-link">Tableau de bord</nuxt-link>
+      <BaseLink text="Accueil" link="/" />
+      <BaseLink text="Tableau de bord" link="/dashboard" />
     </div>
   </header>
 </template>
 
 <script>
-export default {};
+import BaseLink from "@/components/Base/BaseLink.vue";
+
+export default {
+  components: {
+    BaseLink
+  }
+};
 </script>
 
 <style scoped>
-.text-link {
-  text-decoration: none;
-  color: black;
-  font-family: "Montserrat";
-  margin: 0 8px;
-  transition: all 0.2s ease-in;
-}
-
-.text-link:hover {
-  border-bottom: 1px black solid;
-}
-
-.text-link:focus {
-  outline: 0;
-}
-
-.link:hover:before {
-  width: 100%;
-}
-
 .flex-center {
   justify-content: space-between;
 }
@@ -45,6 +31,7 @@ export default {};
 
 .right {
   margin-right: 16px;
+  display: flex;
 }
 
 @media screen and (max-width: 340px) {

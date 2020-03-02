@@ -30,10 +30,9 @@ export default {
 button {
   display: block;
   width: 200px;
-  height: 100%;
+  height: calc(100% - 24px);
   padding: 0;
   margin: 0;
-  height: 800px;
   transition: all 0.3s;
   width: 250px;
   border: 1px black solid;
