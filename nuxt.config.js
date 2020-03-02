@@ -40,10 +40,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [
-    { src: "~/plugins/axios.js", ssr: true },
-    { src: "~/plugins/vue-datepicker.js", ssr: false }
-  ],
+  plugins: [{ src: "~/plugins/vue-datepicker.js", ssr: false }],
 
   env: {
     baseUrl: process.env.BASE_URL || "http://localhost:3000"
@@ -60,7 +57,21 @@ export default {
     }
   },
 
-  modules: ["@nuxtjs/axios"],
+  modules: ["@nuxtjs/axios", "nuxt-socket-io"],
+
+  io: {
+    sockets: [
+      {
+        name: "home",
+        url: "http://localhost:5000",
+        default: true,
+        vuex: {
+          // optional
+          mutations: [{ message: "SET_STATUS" }]
+        }
+      }
+    ]
+  },
 
   axios: {
     host: "http://172.23.0.3",

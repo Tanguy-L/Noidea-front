@@ -1,36 +1,53 @@
 <template>
   <div class="main-page">
-    <Update
-      v-for="(el, index) in updates"
-      :key="index"
-      style="margin-top:24px;"
-      :id-update="el._id"
+    <h1>{{ statusState }}</h1>
+    <h2>{{ user }}</h2>
+    <input
+      v-model="text"
+      type="text"
     />
-    <CreateUpdate />
+    <button @click="sendToSocket">Envoyer au serveur</button>
   </div>
 </template>
 
 <script>
-import Update from "@/components/Columns/Update.vue";
-import CreateUpdate from "@/components/Columns/CreateUpdate.vue";
 import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 
 export default {
-  components: {
-    Update,
-    CreateUpdate
-  },
-  data() {
+  data () {
     return {
-      test: ""
+      progress: 0,
+      text: "",
+      user: ""
     };
   },
   computed: {
-    ...mapGetters(["categories", "updates"])
+    ...mapState({
+      progressState: state => state.progress,
+      statusState: state => state.status
+    })
   },
-  async fetch({ store }) {
-    await store.dispatch("fetchData");
-    await store.dispatch("fetchCategories");
+  mounted () {
+    this.socket = this.$nuxtSocket({
+      channel: "/",
+      reconnection: false
+    });
+    this.socket.emit("connect");
+    this.socket.emit("authenticate", "Moustique", "motdepasse", resp => {
+      console.log(resp);
+
+      this.user = resp
+    })
+    this.socket.emit("message", "this is a beautiful message !");
+    this.socket.emit("getData", {}, resp => {
+      this.progress = resp;
+    });
+  },
+  methods: {
+    sendToSocket () {
+      this.socket.emit("newMessage", { message: this.text, test: "asd" });
+    }
   }
 };
 </script>
@@ -39,7 +56,6 @@ export default {
 .main-page {
   background-color: #d6d6d6;
   padding: 24px 0px;
-  min-height: calc(100% - 80px);
   display: flex;
   flex-wrap: wrap;
 }
